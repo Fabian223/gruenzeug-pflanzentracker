@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grünzeug – Pflanzenpflege</title>
+<meta name="theme-color" content="#4B6B3A">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,440;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="app-header">
+    <h1>Grünzeug</h1>
+    <p class="app-header__meta" id="summary" aria-live="polite">&nbsp;</p>
+  </header>
+
+  <main>
+    <div class="plant-groups" id="plantList"></div>
+    <div class="empty-state" id="emptyState" hidden>
+      <p>Noch keine Pflanzen eingetragen.</p>
+      <p>Leg deine erste Pflanze an, um den Überblick zu behalten.</p>
+    </div>
+  </main>
+
+  <button class="add-button" id="addButton" type="button">
+    <span class="add-button__plus" aria-hidden="true">+</span> Neue Pflanze
+  </button>
+
+  <div class="panel-backdrop" id="panelBackdrop" hidden></div>
+  <section class="panel" id="panel" hidden aria-hidden="true">
+    <form id="plantForm" novalidate>
+      <h2 id="panelTitle">Neue Pflanze</h2>
+
+      <label class="field">
+        <span>Name</span>
+        <input type="text" id="fieldName" placeholder="z. B. Monstera" required>
+      </label>
+
+      <label class="field">
+        <span>Standort <em>(optional)</em></span>
+        <input type="text" id="fieldRoom" placeholder="z. B. Wohnzimmer">
+      </label>
+
+      <label class="field">
+        <span>Gießen alle … Tage</span>
+        <input type="number" id="fieldWaterInterval" min="1" step="1" inputmode="numeric" required>
+      </label>
+
+      <label class="field">
+        <span>Zuletzt gegossen am</span>
+        <input type="date" id="fieldLastWatered" required>
+      </label>
+
+      <label class="field">
+        <span>Düngen alle … Tage <em>(0 = kein Düngeplan)</em></span>
+        <input type="number" id="fieldFertInterval" min="0" step="1" inputmode="numeric" value="0">
+      </label>
+
+      <label class="field" id="fertDateField" hidden>
+        <span>Zuletzt gedüngt am</span>
+        <input type="date" id="fieldLastFert">
+      </label>
+
+      <div class="panel-actions">
+        <button type="button" class="btn btn--danger" id="deleteButton" hidden>Löschen</button>
+        <button type="button" class="btn btn--ghost" id="cancelButton">Abbrechen</button>
+        <button type="submit" class="btn btn--primary">Speichern</button>
+      </div>
+    </form>
+  </section>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
