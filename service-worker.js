@@ -1,4 +1,4 @@
-const CACHE_NAME = "gruenzeug-v2";
+const CACHE_NAME = "gruenzeug-v3";
 const APP_SHELL = [
   "./",
   "./index.html",

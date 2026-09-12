@@ -91,12 +91,26 @@ body {
 .plant__row {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
   gap: 12px;
+}
+
+.plant__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.plant__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .plant__info {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
@@ -297,6 +311,38 @@ body {
 .field input:focus-visible {
   outline: 2px solid var(--moss);
   outline-offset: 1px;
+}
+
+.icon-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.icon-option {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  background: var(--moss-soft);
+  overflow: hidden;
+}
+
+.icon-option svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.icon-option.selected {
+  border-color: var(--moss);
+}
+
+.icon-option:focus-visible {
+  outline: 2px solid var(--moss);
+  outline-offset: 2px;
 }
 
 .panel-actions {

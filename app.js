@@ -8,12 +8,145 @@
    *  id: string,
    *  name: string,
    *  room: string,
+   *  icon: string,
    *  waterIntervalDays: number,
    *  fertIntervalDays: number,
    *  lastWatered: string,   // ISO date (yyyy-mm-dd)
    *  lastFert: string | null
    * }} Plant
    */
+
+  const DEFAULT_ICON = "generic";
+
+  const PLANT_ICONS = {
+    generic: {
+      label: "Generisch",
+      markup: `
+        <path d="M256 322 L256 236" stroke="#F6F7F1" stroke-width="12" stroke-linecap="round"/>
+        <path d="M256 236 C 210 236 176 206 172 158 C 224 160 256 196 256 236 Z" fill="#F6F7F1"/>
+        <path d="M256 236 C 302 236 336 206 340 158 C 288 160 256 196 256 236 Z" fill="#F6F7F1"/>
+        <rect x="192" y="316" width="128" height="16" rx="7" fill="#F6F7F1"/>
+        <path d="M200 332 L312 332 L294 396 L218 396 Z" fill="#F6F7F1"/>`,
+    },
+    monstera: {
+      label: "Monstera",
+      markup: `
+        <path d="M256 150 C 320 170 340 240 300 300 C 280 330 256 350 256 350 C 256 350 232 330 212 300 C 172 240 192 170 256 150 Z" fill="#F6F7F1"/>
+        <path d="M348 190 L275 222 L346 258 Z" fill="#4B6B3A"/>
+        <path d="M166 205 L226 228 L170 252 Z" fill="#4B6B3A"/>
+        <circle cx="252" cy="278" r="17" fill="#4B6B3A"/>
+        <circle cx="290" cy="240" r="11" fill="#4B6B3A"/>
+        <line x1="256" y1="172" x2="256" y2="330" stroke="#4B6B3A" stroke-width="6" opacity="0.35"/>
+        <rect x="192" y="316" width="128" height="16" rx="7" fill="#F6F7F1"/>
+        <path d="M200 332 L312 332 L294 396 L218 396 Z" fill="#F6F7F1"/>`,
+    },
+    "monkey-leaf": {
+      label: "Monkey Leaf",
+      markup: `
+        <path d="M256 145 C 290 155 305 200 298 245 C 293 285 275 315 256 325 C 237 315 219 285 214 245 C 207 200 222 155 256 145 Z" fill="#F6F7F1"/>
+        <circle cx="240" cy="190" r="8" fill="#4B6B3A"/>
+        <circle cx="272" cy="195" r="7" fill="#4B6B3A"/>
+        <circle cx="250" cy="223" r="9" fill="#4B6B3A"/>
+        <circle cx="278" cy="228" r="6" fill="#4B6B3A"/>
+        <circle cx="238" cy="258" r="8" fill="#4B6B3A"/>
+        <circle cx="268" cy="262" r="7" fill="#4B6B3A"/>
+        <circle cx="256" cy="290" r="6" fill="#4B6B3A"/>
+        <line x1="256" y1="325" x2="256" y2="332" stroke="#F6F7F1" stroke-width="8"/>
+        <rect x="192" y="316" width="128" height="16" rx="7" fill="#F6F7F1"/>
+        <path d="M200 332 L312 332 L294 396 L218 396 Z" fill="#F6F7F1"/>`,
+    },
+    kaktus: {
+      label: "Kaktus",
+      markup: `
+        <path d="M226 260 C 196 260 176 244 176 214 C 176 194 190 182 206 186 L206 214 C 206 232 214 244 226 248 Z" fill="#F6F7F1"/>
+        <path d="M286 230 C 316 230 336 214 336 184 C 336 164 322 152 306 156 L306 184 C 306 202 296 214 286 218 Z" fill="#F6F7F1"/>
+        <rect x="226" y="195" width="60" height="140" rx="28" fill="#F6F7F1"/>
+        <line x1="241" y1="212" x2="241" y2="328" stroke="#4B6B3A" stroke-width="5" opacity="0.3"/>
+        <line x1="271" y1="212" x2="271" y2="328" stroke="#4B6B3A" stroke-width="5" opacity="0.3"/>
+        <circle cx="256" cy="182" r="14" fill="#C08A2E"/>
+        <rect x="192" y="316" width="128" height="16" rx="7" fill="#F6F7F1"/>
+        <path d="M200 332 L312 332 L294 396 L218 396 Z" fill="#F6F7F1"/>`,
+    },
+    avocado: {
+      label: "Avocado Pflanze",
+      markup: `
+        <line x1="256" y1="320" x2="256" y2="150" stroke="#F6F7F1" stroke-width="8" stroke-linecap="round"/>
+        <path d="M256 180 C 240 160 238 120 256 95 C 274 120 272 160 256 180 Z" fill="#F6F7F1"/>
+        <path d="M256 225 C 225 215 195 225 178 250 C 200 258 228 250 244 232 Z" fill="#F6F7F1"/>
+        <path d="M256 255 C 287 245 317 255 334 280 C 312 288 284 280 268 262 Z" fill="#F6F7F1"/>
+        <rect x="192" y="316" width="128" height="16" rx="7" fill="#F6F7F1"/>
+        <path d="M200 332 L312 332 L294 396 L218 396 Z" fill="#F6F7F1"/>`,
+    },
+    drachenbaum: {
+      label: "Drachenbaum",
+      markup: `
+        <rect x="246" y="258" width="20" height="72" rx="7" fill="#F6F7F1"/>
+        <path d="M256 260 C 250 220 250 160 256 108 C 262 160 262 220 256 260 Z" fill="#F6F7F1" transform="rotate(-60 256 260)"/>
+        <path d="M256 260 C 250 220 250 160 256 118 C 262 160 262 220 256 260 Z" fill="#F6F7F1" transform="rotate(-32 256 260)"/>
+        <path d="M256 260 C 250 220 250 160 256 108 C 262 160 262 220 256 260 Z" fill="#F6F7F1" transform="rotate(-6 256 260)"/>
+        <path d="M256 260 C 250 220 250 160 256 118 C 262 160 262 220 256 260 Z" fill="#F6F7F1" transform="rotate(20 256 260)"/>
+        <path d="M256 260 C 250 220 250 160 256 108 C 262 160 262 220 256 260 Z" fill="#F6F7F1" transform="rotate(48 256 260)"/>
+        <rect x="192" y="316" width="128" height="16" rx="7" fill="#F6F7F1"/>
+        <path d="M200 332 L312 332 L294 396 L218 396 Z" fill="#F6F7F1"/>`,
+    },
+    "madagaskar-drachenbaum": {
+      label: "Madagaskar-Drachenbaum",
+      markup: `
+        <rect x="222" y="228" width="14" height="102" rx="6" fill="#F6F7F1"/>
+        <rect x="268" y="258" width="14" height="72" rx="6" fill="#F6F7F1"/>
+        <path d="M229 230 C 224 202 224 168 229 136 C 234 168 234 202 229 230 Z" fill="#F6F7F1" transform="rotate(-42 229 230)"/>
+        <path d="M229 230 C 224 202 224 168 229 128 C 234 168 234 202 229 230 Z" fill="#F6F7F1" transform="rotate(-12 229 230)"/>
+        <path d="M229 230 C 224 202 224 168 229 136 C 234 168 234 202 229 230 Z" fill="#F6F7F1" transform="rotate(20 229 230)"/>
+        <path d="M229 230 C 224 202 224 168 229 148 C 234 168 234 202 229 230 Z" fill="#F6F7F1" transform="rotate(48 229 230)"/>
+        <path d="M275 260 C 271 238 271 210 275 184 C 279 210 279 238 275 260 Z" fill="#F6F7F1" transform="rotate(-26 275 260)"/>
+        <path d="M275 260 C 271 238 271 210 275 178 C 279 210 279 238 275 260 Z" fill="#F6F7F1" transform="rotate(4 275 260)"/>
+        <path d="M275 260 C 271 238 271 210 275 190 C 279 210 279 238 275 260 Z" fill="#F6F7F1" transform="rotate(30 275 260)"/>
+        <rect x="192" y="316" width="128" height="16" rx="7" fill="#F6F7F1"/>
+        <path d="M200 332 L312 332 L294 396 L218 396 Z" fill="#F6F7F1"/>`,
+    },
+    bogenhanf: {
+      label: "Bogenhanf",
+      markup: `
+        <path d="M246 320 L246 130 L256 108 L266 130 L266 320 Z" fill="#F6F7F1"/>
+        <path d="M214 320 L216 155 L224 138 L232 155 L234 320 Z" fill="#F6F7F1" transform="rotate(-13 224 320)"/>
+        <path d="M278 320 L280 155 L288 138 L296 155 L298 320 Z" fill="#F6F7F1" transform="rotate(13 288 320)"/>
+        <path d="M186 320 L188 190 L196 175 L204 190 L206 320 Z" fill="#F6F7F1" transform="rotate(-26 196 320)"/>
+        <path d="M306 320 L308 190 L316 175 L324 190 L326 320 Z" fill="#F6F7F1" transform="rotate(26 316 320)"/>
+        <rect x="192" y="316" width="128" height="16" rx="7" fill="#F6F7F1"/>
+        <path d="M200 332 L312 332 L294 396 L218 396 Z" fill="#F6F7F1"/>`,
+    },
+    "aloe-vera": {
+      label: "Aloe Vera",
+      markup: `
+        <path d="M244 320 C 240 260 248 190 258 150 C 268 190 272 260 268 320 Z" fill="#F6F7F1"/>
+        <path d="M244 320 C 240 268 246 210 256 178 C 264 210 268 268 264 320 Z" fill="#F6F7F1" transform="rotate(-26 256 320)"/>
+        <path d="M244 320 C 240 268 246 210 256 178 C 264 210 268 268 264 320 Z" fill="#F6F7F1" transform="rotate(26 256 320)"/>
+        <path d="M248 320 C 246 280 252 232 260 205 C 266 232 270 280 266 320 Z" fill="#F6F7F1" transform="rotate(-50 256 320)"/>
+        <path d="M248 320 C 246 280 252 232 260 205 C 266 232 270 280 266 320 Z" fill="#F6F7F1" transform="rotate(50 256 320)"/>
+        <rect x="192" y="316" width="128" height="16" rx="7" fill="#F6F7F1"/>
+        <path d="M200 332 L312 332 L294 396 L218 396 Z" fill="#F6F7F1"/>`,
+    },
+    orchidee: {
+      label: "Orchidee",
+      markup: `
+        <path d="M256 320 C 230 310 220 280 228 250 C 244 270 256 295 256 320 Z" fill="#F6F7F1"/>
+        <path d="M256 320 C 262 275 295 250 312 205 C 320 180 316 155 302 140" fill="none" stroke="#F6F7F1" stroke-width="8" stroke-linecap="round"/>
+        <circle cx="283" cy="203" r="8" fill="#F6F7F1"/>
+        <ellipse cx="302" cy="104" rx="14" ry="21" fill="#F6F7F1"/>
+        <ellipse cx="302" cy="104" rx="14" ry="21" fill="#F6F7F1" transform="rotate(72 302 128)"/>
+        <ellipse cx="302" cy="104" rx="14" ry="21" fill="#F6F7F1" transform="rotate(144 302 128)"/>
+        <ellipse cx="302" cy="104" rx="14" ry="21" fill="#F6F7F1" transform="rotate(216 302 128)"/>
+        <ellipse cx="302" cy="104" rx="14" ry="21" fill="#F6F7F1" transform="rotate(288 302 128)"/>
+        <circle cx="302" cy="128" r="8" fill="#C08A2E"/>
+        <rect x="192" y="316" width="128" height="16" rx="7" fill="#F6F7F1"/>
+        <path d="M200 332 L312 332 L294 396 L218 396 Z" fill="#F6F7F1"/>`,
+    },
+  };
+
+  function iconMarkup(key) {
+    const icon = PLANT_ICONS[key] || PLANT_ICONS[DEFAULT_ICON];
+    return `<svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="115" fill="#4B6B3A"/>${icon.markup}</svg>`;
+  }
 
   const els = {
     list: document.getElementById("plantList"),
@@ -25,6 +158,7 @@
     panelTitle: document.getElementById("panelTitle"),
     form: document.getElementById("plantForm"),
     fieldName: document.getElementById("fieldName"),
+    iconPicker: document.getElementById("iconPicker"),
     fieldRoom: document.getElementById("fieldRoom"),
     fieldWaterInterval: document.getElementById("fieldWaterInterval"),
     fieldLastWatered: document.getElementById("fieldLastWatered"),
@@ -37,6 +171,7 @@
 
   let plants = loadPlants();
   let editingId = null; // null => "add" mode
+  let selectedIcon = DEFAULT_ICON;
 
   // ---------- storage ----------
 
@@ -125,12 +260,17 @@
 
     if (!hasPlants) {
       els.summary.textContent = "";
-    } else if (overdueCount > 0) {
-      els.summary.textContent = `${overdueCount} ${overdueCount === 1 ? "Pflanze wartet" : "Pflanzen warten"} schon länger aufs Gießen`;
-    } else if (dueTodayCount > 0) {
-      els.summary.textContent = `${dueTodayCount} ${dueTodayCount === 1 ? "Pflanze ist" : "Pflanzen sind"} heute dran`;
     } else {
-      els.summary.textContent = "Alles versorgt";
+      const totalLabel = `${plants.length} ${plants.length === 1 ? "Pflanze" : "Pflanzen"}`;
+      let statusLabel;
+      if (overdueCount > 0) {
+        statusLabel = `${overdueCount} ${overdueCount === 1 ? "wartet" : "warten"} schon länger aufs Gießen`;
+      } else if (dueTodayCount > 0) {
+        statusLabel = `${dueTodayCount} ${dueTodayCount === 1 ? "ist" : "sind"} heute dran`;
+      } else {
+        statusLabel = "alles versorgt";
+      }
+      els.summary.textContent = `${totalLabel} · ${statusLabel}`;
     }
 
     const groups = groupByRoom(enriched);
@@ -192,6 +332,11 @@
 
     const row = document.createElement("div");
     row.className = "plant__row";
+
+    const avatar = document.createElement("div");
+    avatar.className = "plant__icon";
+    avatar.innerHTML = iconMarkup(p.icon);
+    row.appendChild(avatar);
 
     const info = document.createElement("div");
     info.className = "plant__info";
@@ -279,6 +424,26 @@
     render();
   }
 
+  function buildIconPicker() {
+    Object.keys(PLANT_ICONS).forEach((key) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "icon-option";
+      btn.dataset.icon = key;
+      btn.title = PLANT_ICONS[key].label;
+      btn.innerHTML = iconMarkup(key);
+      btn.addEventListener("click", () => selectIcon(key));
+      els.iconPicker.appendChild(btn);
+    });
+  }
+
+  function selectIcon(key) {
+    selectedIcon = key;
+    Array.from(els.iconPicker.children).forEach((btn) => {
+      btn.classList.toggle("selected", btn.dataset.icon === key);
+    });
+  }
+
   function toggleFertDateVisibility() {
     const active = parseInt(els.fieldFertInterval.value, 10) > 0;
     els.fertDateField.hidden = !active;
@@ -292,6 +457,7 @@
     els.fieldLastWatered.value = todayISO();
     els.fieldFertInterval.value = "0";
     els.fieldLastFert.value = todayISO();
+    selectIcon(DEFAULT_ICON);
     toggleFertDateVisibility();
     showPanel();
   }
@@ -308,6 +474,7 @@
     els.fieldLastWatered.value = p.lastWatered;
     els.fieldFertInterval.value = p.fertIntervalDays || 0;
     els.fieldLastFert.value = p.lastFert || todayISO();
+    selectIcon(p.icon || DEFAULT_ICON);
     toggleFertDateVisibility();
     showPanel();
   }
@@ -346,6 +513,7 @@
       const p = plants.find((x) => x.id === editingId);
       p.name = name;
       p.room = room;
+      p.icon = selectedIcon;
       p.waterIntervalDays = waterIntervalDays;
       p.lastWatered = lastWatered;
       p.fertIntervalDays = fertIntervalDays;
@@ -355,6 +523,7 @@
         id: crypto.randomUUID(),
         name,
         room,
+        icon: selectedIcon,
         waterIntervalDays,
         fertIntervalDays,
         lastWatered,
@@ -380,6 +549,7 @@
 
   els.fieldLastWatered.max = todayISO();
   els.fieldLastFert.max = todayISO();
+  buildIconPicker();
 
   els.addButton.addEventListener("click", openAddPanel);
   els.cancelButton.addEventListener("click", hidePanel);
